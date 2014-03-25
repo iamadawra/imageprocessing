@@ -22,8 +22,6 @@ int main(int argc, char** argv) {
     std::vector<unsigned int> histogram(256);
     a.getHistogram(&histogram[0]);
 
-    a.save("hi.png");
-
     Gnuplot g1("lines");
     g1.plot_x(histogram);
 
