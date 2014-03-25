@@ -19,5 +19,20 @@ Model of unaltered images
 Fingerprints of Pixel Value Mappings
 ------------------------------------
 
+Note: For rest of these notes, h' is the histogram of the modified image, h is
+the histogram of the original image.
+
 * Consider the effect of a pixel value mapping on the histogram, h'(l).
 * Look at f(l) = h'(l) - h(l) and its frequency response.
+
+
+### Contrast Enhancement
+* Can prove that energy of DFT(h') >= energy of DFT(h). This increase in energy
+  can't occur at DC (DC corresponds to sum of histogram values, i.e. the number
+  of pixels).
+* Thus, DFT(h') has more energy at higher frequencies; but we expect DFT of
+  unaltered histograms to have high energy at DC
+* We attempt to detect contrast enhancement by looking at strenght of high
+  frequencies; but this can flag overexposed images as well. Use a pinch
+  function to reduce color values at either saturation end (low values or high
+  values). The pinch function can be seen in the ipython notebook.
