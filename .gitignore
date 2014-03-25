@@ -8,3 +8,9 @@ cscope.out
 
 # iPython notebook
 .ipynb_checkpoints
+
+# Platform specific
+###################
+
+# Windows
+[Tt]humbs.db
