@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include <gnuplot_i.hpp>
 
 using std::cout;
 using std::endl;
