@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include "Image.hpp"
 #include <gnuplot_i.hpp>
 
 using std::cout;
@@ -17,14 +18,10 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    fipImage a;
-    a.load(argv[1]);
-
-    std::vector<unsigned int> histogram(256);
-    a.getHistogram(&histogram[0]);
+    Image img(argv[1]);
 
     Gnuplot g1("lines");
-    g1.plot_x(histogram);
+    g1.plot_x(img.getHistogram());
 
     wait_for_key();
 
