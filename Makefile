@@ -1,12 +1,13 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++11 -Ignuplotcpp
 LIBS = -lGLU -lglut -lfreeimageplus
+HEADERS = $(wildcard *.hpp)
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
 include **/Makefile.mk
 
-%.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $^ -o $@
+%.o : %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 main: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
