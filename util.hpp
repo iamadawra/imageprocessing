@@ -1,5 +1,5 @@
-#ifndef UTIL_HPP
-#define UTIL_HPP
+#ifndef _UTIL_HPP
+#define _UTIL_HPP
 
 #include <stdio.h>
 #include <iostream>
