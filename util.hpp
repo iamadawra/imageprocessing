@@ -1,3 +1,6 @@
+#ifndef UTIL_HPP
+#define UTIL_HPP
+
 #include <stdio.h>
 #include <iostream>
 
@@ -6,3 +9,4 @@
 #include <FreeImagePlus.h>
 
 #include <vector>
+#endif
