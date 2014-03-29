@@ -36,3 +36,8 @@ the histogram of the original image.
   frequencies; but this can flag overexposed images as well. Use a pinch
   function to reduce color values at either saturation end (low values or high
   values). The pinch function can be seen in the ipython notebook.
+
+Setup
+=====
+* TODO: create some setup script
+* For now, you'll need to install FreeImage (with FreeImage++) and gnuplot
