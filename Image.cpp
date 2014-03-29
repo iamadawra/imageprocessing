@@ -1,7 +1,7 @@
 #include "Image.hpp"
 
-Image::Image(char* path) : fImage(fipImage()), path(path) {
-    fImage.load(path);
+Image::Image(char* _path) : fImage(fipImage()), path(path) {
+    fImage.load(_path);
 }
 
 Image::Image(const Image& img) : fImage(fipImage(img.fImage)) {
