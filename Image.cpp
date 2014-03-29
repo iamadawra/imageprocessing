@@ -1,7 +1,10 @@
 #include "Image.hpp"
 
-Image::Image(char* path) : fImage(fipImage()) {
+Image::Image(char* path) : fImage(fipImage()), path(path) {
     fImage.load(path);
+}
+
+Image::Image(const Image& img) : fImage(fipImage(img.fImage)) {
 }
 
 std::vector<unsigned int> Image::getHistogram() {
