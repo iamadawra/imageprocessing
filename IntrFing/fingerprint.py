@@ -15,6 +15,7 @@ from pylab import imshow
 from matplotlib.gridspec import GridSpec
 
 from global_contrast import *
+from histogram_equalize import *
 
 def load_gray(path):
     return ImageOps.grayscale(Image.open(path))
@@ -69,6 +70,22 @@ def main():
     print "Energy (contrast): %s" % gcd.fft_energy(im_cont)
 
     compare_display(im, im_cont)
+
+    im_eq = ImageOps.equalize(im)
+    hed = HistogramEqualizationDetector()
+
+    print "Distance from uniform (original): %s" % hed.distance_from_uniform(im)
+    print "Distance from uniform (equalized): %s" % hed.distance_from_uniform(im_eq)
+
+    show_gray(im)
+    plt.figure()
+    show_gray(im_eq)
+    plt.figure()
+
+    plt.plot(im.histogram(), label="original")
+    plt.plot(im_eq.histogram(), label="equalized")
+    plt.plot(hed.handle_exposure(im_eq.histogram()), label="exposure handling equalized")
+    plt.legend()
     plt.show()
 
 if __name__ == '__main__':
