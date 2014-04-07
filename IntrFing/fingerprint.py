@@ -14,6 +14,8 @@ from numpy import cos
 from pylab import imshow
 from matplotlib.gridspec import GridSpec
 
+from global_contrast import *
+
 def load_gray(path):
     return ImageOps.grayscale(Image.open(path))
 
@@ -22,33 +24,6 @@ def show_gray(img):
 
 def get_hist_fft(im):
     return fft.fft(np.array(im.histogram()))
-
-def pinch(N=4):
-    out = np.ones(256)
-    values = np.arange(256)
-
-    first = np.where(values <= N)
-    out[first] = .5 - .5 * cos(math.pi * first[0] / float(N))
-
-    second = np.where(values >= 255 - N)
-    out[second] = .5 + .5 * cos(math.pi * (second[0] - 255 + N) / N)
-
-    return out
-
-def fft_energy(hist_fft, c=112):
-    """
-    Calculate the energy of this histogram as described in the paper
-
-    E = (1/N) * sum_{k} (beta(k) * G(k))
-        * G(k) = @hist_fft
-                     / 1     @c <= k <= 128
-        * beta(k) = <
-                     \ 0     else
-        * paper suggests @c value of 112
-    """
-    beta = np.zeros(256)
-    beta[c:128] = 1
-    return np.sum(np.abs(beta * hist_fft)) / 256.0
 
 def compare_display(im, im_cont):
     """
@@ -79,8 +54,8 @@ def compare_display(im, im_cont):
     plt.legend()
 
     plt.subplot(gs[2,:-1])
-    plt.plot(np.abs(fft.fftshift(get_hist_fft(im))), label='original')
-    plt.plot(np.abs(fft.fftshift(get_hist_fft(im_cont))), label='contrast')
+    plt.plot(np.abs(fft.fftshift(fft.fft(im.histogram()))), label='original')
+    plt.plot(np.abs(fft.fftshift(fft.fft(im_cont.histogram()))), label='contrast')
     plt.legend()
 
 def main():
@@ -89,10 +64,12 @@ def main():
     im = load_gray(path)
     im_cont = ImageOps.autocontrast(im)
 
+    gcd = GlobalContrastDetector()
+    print "Energy (original): %s" % gcd.fft_energy(im)
+    print "Energy (contrast): %s" % gcd.fft_energy(im_cont)
+
     compare_display(im, im_cont)
     plt.show()
-    print "Energy (original): %s" % (fft_energy(get_hist_fft(im)))
-    print "Energy (contrast): %s" % (fft_energy(get_hist_fft(im_cont)))
 
 if __name__ == '__main__':
     main()
