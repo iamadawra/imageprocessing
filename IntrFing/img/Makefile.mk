@@ -8,9 +8,10 @@ DIR = img
 # A list of all image names from the sources files
 IMAGES = $(shell cut -d' ' -f1 $(DIR)/sources | sed -e 's/^/$(DIR)\//g')
 
-all:
+all: img
 
 include $(DIR)/images.mk
+
 
 # Create an images.mk file with targets of the following format:
 # ---
@@ -23,9 +24,9 @@ include $(DIR)/images.mk
 # Note that the URL needs to be quoted before passing into wget, to avoid
 # various issues with the terminal.
 
-$(DIR)/images.mk: $(DIR)/Makefile.mk
+$(DIR)/images.mk: $(DIR)/Makefile.mk $(DIR)/sources
 	@rm -f $@
-	@echo "all: $(IMAGES)" > $@ # target `all`
+	@echo "img: $(IMAGES)" > $@ # target `all`
 	@echo >> $@                 # separating line
 	@awk '{ \
 		print "$(DIR)/"$$1 ":\n\
