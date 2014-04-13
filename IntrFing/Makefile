@@ -9,6 +9,9 @@ include **/Makefile.mk
 %.o : %.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+img:
+	make -C img
+
 main: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
