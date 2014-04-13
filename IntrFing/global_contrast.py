@@ -1,6 +1,7 @@
 import math
 import numpy as np
-import ImageOps
+from PIL import Image
+from PIL import ImageOps
 
 import numpy.fft as fft
 from numpy import cos

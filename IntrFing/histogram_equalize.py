@@ -1,5 +1,5 @@
 import numpy as np
-import ImageOps
+from PIL import ImageOps
 
 import numpy.fft as fft
 
@@ -54,7 +54,7 @@ class HistogramEqualizationDetector(object):
         if last_non_zero <= 253 and histogram[last_non_zero] >= 2*N/255.0:
             # overexposed
             new_hist = histogram
-            new_hist[last_non_zero:] = 0
+            new_hist[last_non_zero] = 0
             return new_hist
 
         return histogram

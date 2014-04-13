@@ -1,9 +1,9 @@
 import math
 import sys
 
-import Image
-import ImageOps
-import ImageChops
+from PIL import Image
+from PIL import ImageOps
+from PIL import ImageChops
 import matplotlib
 import numpy as np
 
