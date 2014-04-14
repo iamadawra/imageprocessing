@@ -84,7 +84,7 @@ def main():
 
     plt.plot(im.histogram(), label="original")
     plt.plot(im_eq.histogram(), label="equalized")
-    plt.plot(hed.handle_exposure(im_eq.histogram()), label="exposure handling equalized")
+    plt.plot(hed.handle_exposure(np.array(im_eq.histogram())), label="exposure handling equalized")
     plt.legend()
     plt.show()
 
