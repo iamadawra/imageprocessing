@@ -39,15 +39,15 @@ class LocalContrastDetector(object):
         currY = 0
         flag = True
         while(flag):
-            print("currX+boxSize: " + str(currX+boxSize))
-            print("currY: " + str(currY))
+            #print("currX+boxSize: " + str(currX+boxSize))
+            #print("currY: " + str(currY))
             if currX+boxSize <= imgWidth and currY+boxSize <= imgHeight:
-                print("Checkpoint 1")
+                #print("Checkpoint 1")
                 #Case where image is being chopped up into perfect squares
                 box = (currX, currY, currX + boxSize, currY + boxSize)
-                print("BOX: " + str(box))
+                #print("BOX: " + str(box))
                 region = img.crop(box)
-                print("Region: " + str(region.size))
+                #print("Region: " + str(region.size))
                 #compare fft_energy of enhanced image with original image over here
                 img.paste(self.checkLocalContrastHelper(region), box)
 
@@ -55,7 +55,7 @@ class LocalContrastDetector(object):
                 currX = currX + boxSize
                 continue
             if currX+boxSize <= imgWidth and currY+boxSize > imgHeight:
-                print("Checkpoint 2")
+                #print("Checkpoint 2")
                 #Case where there is enough width but not enough height
                 box = (currX, currY, currX + boxSize, imgHeight)
                 region = img.crop(box)
@@ -66,7 +66,7 @@ class LocalContrastDetector(object):
                 currX = currX + boxSize
                 continue
             if currX+boxSize > imgWidth and currY+boxSize <= imgHeight:
-                print("Checkpoint 3")
+                #print("Checkpoint 3")
                 #Case where there is enough height but not enough width
                 box = (currX, currY, imgWidth, currY + boxSize)
                 region = img.crop(box)
@@ -78,7 +78,7 @@ class LocalContrastDetector(object):
                 currY = currY + boxSize
                 continue
             else:
-                print("Checkpoint 4")
+                #print("Checkpoint 4")
                 #Case where there is not enough width and not enough height
                 box = (currX, currY, imgWidth, imgHeight)
                 region = img.crop(box)
@@ -95,24 +95,24 @@ class LocalContrastDetector(object):
         """
         Function to compare the contrast of a subpart of a given image.
         """
-        print("Inside checkLocalContrastHelper")
+        #print("Inside checkLocalContrastHelper")
         originalImg = img
         contrastedImg = ImageOps.autocontrast(img)
         originalFFT = self.gcd.fft_energy(originalImg)
         contrastedFFT = self.gcd.fft_energy(contrastedImg)
-        print("Threshold: " + str(thresholdValue))
-        print("Value: " + str(math.fabs(originalFFT-contrastedFFT)))
+        #print("Threshold: " + str(thresholdValue))
+        #print("Value: " + str(math.fabs(originalFFT-contrastedFFT)))
         if (math.fabs(originalFFT-contrastedFFT) >= thresholdValue):
-            print("I'm here!")
+            #print("I'm here!")
             return self.blackBorderImage(img)
         return img
 
     def blackBorderImage(self, img, borderWidth=1):
         imageWidth, imageHeight = img.size
-        print("imageWidth: "+ str(imageWidth))
-        print("imageHeight: " + str(imageHeight))
+        #print("imageWidth: "+ str(imageWidth))
+        #print("imageHeight: " + str(imageHeight))
         box = (borderWidth, borderWidth, (imageWidth - (borderWidth*2)), (imageHeight - (borderWidth*2)))
-        print("box: " + str(box))
+        #print("box: " + str(box))
         croppedImage = img.crop(box)
         new_im = Image.new("RGB", (imageWidth, imageHeight))   ## luckily, this is already black!
         new_im.paste(croppedImage, box)
