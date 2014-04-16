@@ -100,7 +100,7 @@ class LocalContrastDetector(object):
         #display the final Image        
         img.show()
 
-    def checkLocalContrastHelper(self, img, thresholdValue=1.5):
+    def checkLocalContrastHelper(self, img, thresholdValue=2):
         """
         Function to compare the contrast of a subpart of a given image.
         """
@@ -135,12 +135,14 @@ class LocalContrastDetector(object):
         if (contrastedFFT - originalFFT >= thresholdValue):
             blueFlag = True
 
-        #Additional check for the whole image
+        #Additional check for the whole image (Not mentioned in the paper lol)
         originalImg = img
         contrastedImg = ImageOps.autocontrast(img)
         originalFFT = self.gcd.fft_energy(originalImg)
         contrastedFFT = self.gcd.fft_energy(contrastedImg)
-        if (contrastedFFT - originalFFT >= thresholdValue):
+        print("Original FFT: " + str(originalFFT))
+        print("Contrasted FFT: " + str(contrastedFFT))
+        if (contrastedFFT - originalFFT  >= thresholdValue):
             overallFlag = True
 
         if (redFlag and greenFlag and blueFlag and overallFlag):
