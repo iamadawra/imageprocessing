@@ -16,6 +16,7 @@ from matplotlib.gridspec import GridSpec
 
 from global_contrast import *
 from histogram_equalize import *
+from local_contrast import *
 
 def load_gray(path):
     return ImageOps.grayscale(Image.open(path))
@@ -68,6 +69,9 @@ def main():
     gcd = GlobalContrastDetector()
     print "Energy (original): %s" % gcd.fft_energy(im)
     print "Energy (contrast): %s" % gcd.fft_energy(im_cont)
+
+    lcd = LocalContrastDetector(gcd)
+    lcd.checkLocalContrast(Image.open(path))
 
     compare_display(im, im_cont)
 
