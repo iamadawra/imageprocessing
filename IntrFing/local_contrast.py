@@ -1,10 +1,19 @@
 import math
 import numpy as np
+
 from PIL import Image
 from PIL import ImageOps
+from PIL import ImageChops
+import matplotlib
+import numpy as np
 
+import matplotlib.pyplot as plt
 import numpy.fft as fft
+
 from numpy import cos
+from pylab import imshow
+from matplotlib.gridspec import GridSpec
+
 
 class LocalContrastDetector(object):
     def __init__(self, gcd):
@@ -27,7 +36,7 @@ class LocalContrastDetector(object):
         """
         return Image.new('RGB', (size, size), "black")
 
-    def checkLocalContrast(self, img, boxSize=50):
+    def checkLocalContrast(self, img, boxSize=100):
         """
         Breaks the image into boxSize x boxSize sized chunks and applies the
         Global Contrast Enhancement algorithm to check for Local Contrast Enhancement.
@@ -96,14 +105,45 @@ class LocalContrastDetector(object):
         Function to compare the contrast of a subpart of a given image.
         """
         #print("Inside checkLocalContrastHelper")
+        redChannel, greenChannel, blueChannel = img.split()
+        redFlag = False
+        blueFlag = False
+        greenFlag = False
+        overallFlag = False
+
+        #Check for Red Channel
+        originalImg = redChannel
+        contrastedImg = ImageOps.autocontrast(redChannel)
+        originalFFT = self.gcd.fft_energy(originalImg)
+        contrastedFFT = self.gcd.fft_energy(contrastedImg)
+        if (contrastedFFT - originalFFT >= thresholdValue):
+            redFlag = True
+
+        #Check for Green Channel
+        originalImg = greenChannel
+        contrastedImg = ImageOps.autocontrast(greenChannel)
+        originalFFT = self.gcd.fft_energy(originalImg)
+        contrastedFFT = self.gcd.fft_energy(contrastedImg)
+        if (contrastedFFT - originalFFT >= thresholdValue):
+            greenFlag = True
+
+        #Check for Blue Channel
+        originalImg = blueChannel
+        contrastedImg = ImageOps.autocontrast(blueChannel)
+        originalFFT = self.gcd.fft_energy(originalImg)
+        contrastedFFT = self.gcd.fft_energy(contrastedImg)
+        if (contrastedFFT - originalFFT >= thresholdValue):
+            blueFlag = True
+
+        #Additional check for the whole image
         originalImg = img
         contrastedImg = ImageOps.autocontrast(img)
         originalFFT = self.gcd.fft_energy(originalImg)
         contrastedFFT = self.gcd.fft_energy(contrastedImg)
-        #print("Threshold: " + str(thresholdValue))
-        #print("Value: " + str(math.fabs(originalFFT-contrastedFFT)))
-        if (math.fabs(originalFFT-contrastedFFT) >= thresholdValue):
-            #print("I'm here!")
+        if (contrastedFFT - originalFFT >= thresholdValue):
+            overallFlag = True
+
+        if (redFlag and greenFlag and blueFlag and overallFlag):
             return self.blackBorderImage(img)
         return img
 
@@ -114,6 +154,6 @@ class LocalContrastDetector(object):
         box = (borderWidth, borderWidth, (imageWidth - (borderWidth*2)), (imageHeight - (borderWidth*2)))
         #print("box: " + str(box))
         croppedImage = img.crop(box)
-        new_im = Image.new("RGB", (imageWidth, imageHeight))   ## luckily, this is already black!
+        new_im = Image.new("RGB", (imageWidth, imageHeight), "blue")   ## luckily, this is already black!
         new_im.paste(croppedImage, box)
         return new_im
