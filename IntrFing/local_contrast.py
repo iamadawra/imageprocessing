@@ -4,6 +4,8 @@ import numpy as np
 from PIL import Image
 from PIL import ImageOps
 from PIL import ImageChops
+from PIL import ImageDraw
+from PIL import ImageFont
 import matplotlib
 import numpy as np
 
@@ -100,7 +102,9 @@ class LocalContrastDetector(object):
         #display the final Image        
         img.show()
 
-    def checkLocalContrastHelper(self, img, thresholdValue=2):
+    #Check the sliding windows around them and check this threshold value
+
+    def checkLocalContrastHelper(self, img, thresholdValue=0.9):
         """
         Function to compare the contrast of a subpart of a given image.
         """
@@ -146,10 +150,11 @@ class LocalContrastDetector(object):
             overallFlag = True
 
         if (redFlag and greenFlag and blueFlag and overallFlag):
-            return self.blackBorderImage(img)
-        return img
+            return self.blackBorderImage(img, originalFFT, contrastedFFT)
+        return self.displayValues(img, originalFFT, contrastedFFT)
 
-    def blackBorderImage(self, img, borderWidth=1):
+    def blackBorderImage(self, img, originalFFT, contrastedFFT, borderWidth=1):
+
         imageWidth, imageHeight = img.size
         #print("imageWidth: "+ str(imageWidth))
         #print("imageHeight: " + str(imageHeight))
@@ -158,4 +163,16 @@ class LocalContrastDetector(object):
         croppedImage = img.crop(box)
         new_im = Image.new("RGB", (imageWidth, imageHeight), "blue")   ## luckily, this is already black!
         new_im.paste(croppedImage, box)
-        return new_im
+        return self.displayValues(new_im,originalFFT,contrastedFFT)
+
+    def displayValues(self, img, originalFFT, contrastedFFT):
+        contrastedFFT = round(contrastedFFT, 3)
+        originalFFT = round(originalFFT, 3)
+
+        font = ImageFont.truetype("/System/Library/Fonts/Courier.dfont",24)
+        draw = ImageDraw.Draw(img)
+        draw.text((0, 0),(str(originalFFT)),"blue",font=font)
+        draw = ImageDraw.Draw(img)
+        draw.text((0, 20),(str(contrastedFFT)),"blue",font=font)
+        draw = ImageDraw.Draw(img)
+        return img   
