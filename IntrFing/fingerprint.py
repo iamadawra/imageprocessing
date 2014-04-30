@@ -77,10 +77,10 @@ def main():
 
     im_eq = ImageOps.equalize(im)
     hed = HistogramEqualizationDetector()
-
     print "Distance from uniform (original): %s" % hed.distance_from_uniform(im)
     print "Distance from uniform (equalized): %s" % hed.distance_from_uniform(im_eq)
 
+    plt.figure()
     show_gray(im)
     plt.figure()
     show_gray(im_eq)
